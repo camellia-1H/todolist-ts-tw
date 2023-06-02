@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import "./index.css";
 
 interface Props {
 	todo: string;
@@ -16,7 +15,7 @@ const InputFeild = ({ todo, setTodo, handleSet }: Props) => {
 				type="input"
 				value={todo}
 				onChange={e => setTodo(e.target.value)}
-				className="w-9/12 my-3 border-2 border-sky-500 focus:outline-none focus:ring focus:ring-violet-300"
+				className="w-9/12 my-3 rounded-md border-2 border-sky-500 focus:outline-none focus:ring focus:ring-violet-300"
 			/>
 			<button
 				type="submit"
