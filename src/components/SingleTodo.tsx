@@ -1,34 +1,30 @@
 import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Todo } from "../models/Todo";
+import { doneTodo, deleteTodo, editTodo } from "../features/todo/todoSlice";
 
 type Props = {
 	todo: Todo;
-	list: Todo[];
-	setList: React.Dispatch<React.SetStateAction<Todo[]>>;
+	// list: Todo[];
+	// setList: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-const SingleTodo = ({ todo, list, setList }: Props) => {
+const SingleTodo = ({ todo }: Props) => {
 	const [todoEdit, setTodoEdit] = useState<string>(todo.todo);
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const dispatch = useDispatch();
 
 	const handleDone = (id: number) => {
-		setList(
-			list.map(todo =>
-				todo.id === id ? { ...todo, isDone: !todo.isDone } : todo,
-			),
-		);
+		dispatch(doneTodo(id));
 	};
 
 	const handleDelete = (id: number) => {
-		setList(list.filter(todo => todo.id !== id));
+		dispatch(deleteTodo(id));
 	};
 
-	const handleEdit = (id: number) => {
-		setList(
-			list.map(todo => (todo.id === id ? { ...todo, todo: todoEdit } : todo)),
-		);
-
+	const handleEdit = (id: number, todo: string) => {
+		dispatch(editTodo({ id, todo }));
 		setEdit(false);
 	};
 
@@ -48,8 +44,8 @@ const SingleTodo = ({ todo, list, setList }: Props) => {
 						className="mr-4 border-2 rounded-md border-cyan-300"
 					/>
 					<button
-						className="w-3 h-5 bg-slate-600 text-black"
-						onClick={() => handleEdit(todo.id)}
+						className="w-10 h-6 rounded-lg bg-slate-600 text-red-500"
+						onClick={() => handleEdit(todo.id, todoEdit)}
 					>
 						oke
 					</button>
@@ -63,7 +59,6 @@ const SingleTodo = ({ todo, list, setList }: Props) => {
 					)}
 				</>
 			)}
-
 			<span>{String(todo.isDone)}</span>
 			<button
 				onClick={() => handleDelete(todo.id)}
@@ -71,17 +66,24 @@ const SingleTodo = ({ todo, list, setList }: Props) => {
 			>
 				Delete
 			</button>
-			<button
-				onClick={() => {
-					if (!isEdit) {
-						setEdit(!isEdit);
-						// inputRef.current?.focus();
-					} else setEdit(false);
-				}}
-				className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
-			>
-				Edit
-			</button>
+
+			{todo.isDone ? (
+				<s className="ml-1 text-center w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full ">
+					Edit
+				</s>
+			) : (
+				<button
+					onClick={() => {
+						if (!isEdit) {
+							setEdit(!isEdit);
+							// inputRef.current?.focus();
+						} else setEdit(false);
+					}}
+					className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
+				>
+					Edit
+				</button>
+			)}
 			<button
 				onClick={() => handleDone(todo.id)}
 				className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"

@@ -1,12 +1,15 @@
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../features/todo/todoSlice";
 
 interface Props {
 	todo: string;
 	setTodo: React.Dispatch<React.SetStateAction<string>>;
-	handleSet: () => void;
 }
 
-const InputFeild = ({ todo, setTodo, handleSet }: Props) => {
+const InputFeild = ({ todo, setTodo }: Props) => {
+	const dispatch = useDispatch();
+
 	const inputRef = useRef<HTMLInputElement>(null);
 	return (
 		<div className="w-full text-center">
@@ -21,8 +24,14 @@ const InputFeild = ({ todo, setTodo, handleSet }: Props) => {
 				type="submit"
 				className="w-4/12 text-xl text-blue-700 bg-neutral-400 rounded-full hover:bg-neutral-500 hover:text-red-400"
 				onClick={() => {
-					handleSet();
-					inputRef.current?.focus();
+					if (todo.trim().length > 0) {
+						dispatch(addTodo(todo));
+						setTodo("");
+						inputRef.current?.focus();
+					} else {
+						alert("nhap du ki tu de");
+						inputRef.current?.focus();
+					}
 				}}
 			>
 				Set
