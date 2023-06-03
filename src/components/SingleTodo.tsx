@@ -68,7 +68,7 @@ const SingleTodo = ({ todo }: Props) => {
 			</button>
 
 			{todo.isDone ? (
-				<s className="ml-1 text-center w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full ">
+				<s className="ml-1 text-center w-1/6 text-sm text-fuchsia-400 bg-slate-600 rounded-full ">
 					Edit
 				</s>
 			) : (

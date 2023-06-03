@@ -1,13 +1,9 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addTodo } from "../features/todo/todoSlice";
 
-interface Props {
-	todo: string;
-	setTodo: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const InputFeild = ({ todo, setTodo }: Props) => {
+const InputFeild = () => {
+	const [todo, setTodo] = useState<string>("");
 	const dispatch = useDispatch();
 
 	const inputRef = useRef<HTMLInputElement>(null);
