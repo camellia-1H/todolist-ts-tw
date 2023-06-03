@@ -1,7 +1,7 @@
 import { useState } from "react";
 import InputFeild from "./components/Input";
 import { Todo } from "./models/Todo";
-import SingleTodo from "./components/Singletodo";
+import SingleTodo from "./components/SingleTodo";
 
 function App() {
 	const [todo, setTodo] = useState<string>("");
