@@ -1,10 +1,26 @@
 import { useSelector } from "react-redux";
+import { useMemo, useState } from "react";
 import InputFeild from "./components/Input";
-import SingleTodo from "./components/SingleTodo";
 import { RootState } from "./features/store";
+import TodoList from "./components/TodoList";
 
 function App() {
 	const todos = useSelector((state: RootState) => state.todos);
+	const [filterStatus, setStatus] = useState<string>("All");
+	const [filterString, setFilterString] = useState<string>("");
+
+	const result = useMemo(() => {
+		return todos.filter(todo => {
+			return (
+				(filterStatus === "All"
+					? true
+					: String(todo.isDone) === filterStatus) &&
+				todo.todo.startsWith(filterString)
+			);
+		});
+	}, [filterStatus, todos, filterString]);
+
+	console.log(result);
 	console.log(todos);
 
 	return (
@@ -14,12 +30,26 @@ function App() {
 					To do App by Manh
 				</h1>
 				<InputFeild />
+				<div className="w-6/12 flex justify-around my-4">
+					<label htmlFor="isDone">Filter</label>
+					<input
+						type="text"
+						placeholder="search"
+						className="border-2 rounded-full border-slate-500 focus:bg-red-200 px-2 mx-3"
+						onChange={e => setFilterString(e.target.value)}
+					/>
+					<select
+						name="isDone"
+						id="isDone"
+						onChange={e => setStatus(e.target.value)}
+					>
+						<option value="All">All</option>
+						<option value="true">Done</option>
+						<option value="false">Not Done</option>
+					</select>
+				</div>
 
-				<ul className="w-full marker:text-sky-400 list-disc pl-5 space-y-3 text-slate-400">
-					{todos.map(todo => (
-						<SingleTodo key={todo.id} todo={todo} />
-					))}
-				</ul>
+				<TodoList todos={result} />
 			</div>
 		</div>
 	);

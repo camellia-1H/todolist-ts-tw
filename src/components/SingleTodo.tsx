@@ -59,7 +59,6 @@ const SingleTodo = ({ todo }: Props) => {
 					)}
 				</>
 			)}
-			<span>{String(todo.isDone)}</span>
 			<button
 				onClick={() => handleDelete(todo.id)}
 				className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
@@ -68,28 +67,37 @@ const SingleTodo = ({ todo }: Props) => {
 			</button>
 
 			{todo.isDone ? (
-				<s className="ml-1 text-center w-1/6 text-sm text-fuchsia-400 bg-slate-600 rounded-full ">
-					Edit
-				</s>
+				<>
+					<s className="ml-1 text-center w-1/6 text-sm text-fuchsia-400 bg-slate-600 rounded-full ">
+						Edit
+					</s>
+					<button
+						onClick={() => handleDone(todo.id)}
+						className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-slate-600 rounded-full "
+					>
+						Done
+					</button>
+				</>
 			) : (
-				<button
-					onClick={() => {
-						if (!isEdit) {
-							setEdit(!isEdit);
-							// inputRef.current?.focus();
-						} else setEdit(false);
-					}}
-					className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
-				>
-					Edit
-				</button>
+				<>
+					<button
+						onClick={() => {
+							if (!isEdit) {
+								setEdit(!isEdit);
+							} else setEdit(false);
+						}}
+						className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
+					>
+						Edit
+					</button>
+					<button
+						onClick={() => handleDone(todo.id)}
+						className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
+					>
+						Done
+					</button>
+				</>
 			)}
-			<button
-				onClick={() => handleDone(todo.id)}
-				className="ml-1 w-1/6 text-sm text-fuchsia-400 bg-red-200 rounded-full hover:bg-neutral-500 hover:text-red-400"
-			>
-				Done
-			</button>
 		</li>
 	);
 };
