@@ -7,6 +7,8 @@ type Props = {
 };
 
 const TodoList: FC<Props> = ({ todos }) => {
+	console.log("[todo list]", todos);
+
 	return (
 		<ul className="w-full marker:text-sky-400 list-disc pl-5 space-y-3 text-slate-400">
 			{todos.map(todo => (

@@ -1,11 +1,9 @@
 import { useState, useRef } from "react";
-// import { useDispatch } from "react-redux";
 import { addTodoThunk } from "../features/todo/todoSlice";
 import store from "../features/store";
 
 const InputFeild = () => {
 	const [todo, setTodo] = useState<string>("");
-	// const dispatch = useDispatch();
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	return (

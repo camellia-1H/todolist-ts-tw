@@ -40,7 +40,7 @@ export const setupServer = () => {
         return currentTodo; 
       });
 
-      this.post('/api/editTodo', (schema, request) => {
+      this.put('/api/editTodo', (schema, request) => {
         const id = JSON.parse(request.requestBody).id;
         const editString = JSON.parse(request.requestBody).todo;
         const currentTodo = schema.find('todos', id);
@@ -50,7 +50,15 @@ export const setupServer = () => {
         console.log(currentTodo);
   
         return currentTodo;
-      })
+      });
+
+      this.del('/api/todos', (schema, request) => {
+        const id = JSON.parse(request.requestBody);
+        const currentTodo = schema.find('todos',id);
+        currentTodo?.destroy()        
+        return schema.all('todos')
+      });
+      
     }
   });
 };

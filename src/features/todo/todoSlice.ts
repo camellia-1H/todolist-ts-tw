@@ -39,19 +39,41 @@ const todoSlice = createSlice({
         .addCase(fetchTodos.fulfilled, (state, action) => {
             console.log(action.payload);
             
-            state.status = 'idle';
+            state.status = 'fetch todo done';
             state.todos = action.payload ;
         })
      
         .addCase(addTodoThunk.fulfilled, (state, action) => {
-            state.status = 'idle'
+            state.status = 'add todo done'
             console.log(action.payload);
             
             state.todos.push(action.payload)
         })
+        .addCase(doneTodoThunk.fulfilled,(state, action) => {
+            state.status = 'done todo done'
+            const index = state.todos.findIndex(todo => todo.id == action.payload.id)
+            console.log(index);
+            if(index > -1) {
+                state.todos[index] = action.payload
+            }
+        })
+        .addCase(editTodoThunk.fulfilled, (state, action) => {
+            state.status = 'edit to do done'
+            const index = state.todos.findIndex(todo => todo.id == action.payload.id)
+            console.log(index);
+            if(index > -1) {
+                state.todos[index] = action.payload
+            }
+        })
+        .addCase(deleteTodoThunk.fulfilled, (state, action) => {
+            state.status = 'delete todo done'
+            console.log(action.payload);
+            
+            state.todos = action.payload
+        })
     })
 })
-
+// fetchTodos : thunk action creator
 export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
     const res = await fetch('/api/todos')
     const data = await res.json()
@@ -68,6 +90,34 @@ export const addTodoThunk = createAsyncThunk("todos/addTodo", async (todo : stri
     const data = await res.json()
     console.log(data);
     return data.todos
+})
+
+export const doneTodoThunk = createAsyncThunk('todos/doneTodo',async (id:number) => {
+    const res = await fetch('/api/doneTodo', {
+        method : 'POST', 
+        body: JSON.stringify(id)
+    })
+    const data = await res.json()
+    console.log('[doneTodo]',data.todos);
+    return data.todos
+})
+
+export const editTodoThunk = createAsyncThunk('/todos/editTodo',async (params : {id:number, todo : string}) => {
+    const res = await fetch('/api/editTodo', {
+        method : 'PUT', 
+        body : JSON.stringify(params)
+    })
+    const data = await res.json()
+    return data.todos  
+})
+
+export const deleteTodoThunk = createAsyncThunk('/todos/deleteTodo',async (id : number) => {
+    const res = await fetch('/api/todos', {
+        method : 'DELETE', 
+        body : JSON.stringify(id)
+    })
+    const data = await res.json()
+    return data.todos  
 })
 
 export default todoSlice.reducer

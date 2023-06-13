@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Todo } from "../models/Todo";
-import { doneTodo, deleteTodo, editTodo } from "../features/todo/todoSlice";
+import {
+	doneTodoThunk,
+	editTodoThunk,
+	deleteTodoThunk,
+} from "../features/todo/todoSlice";
+import store from "../features/store";
 
 type Props = {
 	todo: Todo;
@@ -13,18 +17,20 @@ const SingleTodo = ({ todo }: Props) => {
 	const [todoEdit, setTodoEdit] = useState<string>(todo.todo);
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const dispatch = useDispatch();
 
 	const handleDone = (id: number) => {
-		dispatch(doneTodo(id));
+		// dispatch(doneTodo(id));
+		store.dispatch(doneTodoThunk(id));
 	};
 
 	const handleDelete = (id: number) => {
-		dispatch(deleteTodo(id));
+		// dispatch(deleteTodo(id));
+		store.dispatch(deleteTodoThunk(id));
 	};
 
 	const handleEdit = (id: number, todo: string) => {
-		dispatch(editTodo({ id, todo }));
+		// dispatch(editTodo({ id, todo }));
+		store.dispatch(editTodoThunk({ id, todo }));
 		setEdit(false);
 	};
 
@@ -34,6 +40,7 @@ const SingleTodo = ({ todo }: Props) => {
 
 	return (
 		<li className="h-7 flex justify-between items-center mt-2">
+			<span className="caret-lime-200 font-bold h-6 w-6">{todo.isDone}</span>
 			{isEdit ? (
 				<div className="flex-1">
 					<input
