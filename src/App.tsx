@@ -1,27 +1,43 @@
 import { useSelector } from "react-redux";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import InputFeild from "./components/Input";
-import { RootState } from "./features/store";
+import store, { RootState } from "./features/store";
 import TodoList from "./components/TodoList";
+import { setupServer } from "./fakeApi";
+import { fetchTodos } from "./features/todo/todoSlice";
+
+setupServer();
 
 function App() {
-	const todos = useSelector((state: RootState) => state.todos);
+	const todoSelector = useSelector((state: RootState) => state.todos.todos);
 	const [filterStatus, setStatus] = useState<string>("All");
 	const [filterString, setFilterString] = useState<string>("");
+	// const [result, setResult] = useState<Todo[]>([]);
+
+	// const [result, setResult] = useState<Todo[]>([]);
+	// console.log(todos);
+
+	// const result = useMemo(async () => {
+	// 	const data = await store.dispatch(fetchTodos());
+	// 	return data.payload;
+	// }, [filterStatus, filterString]);
+	console.log(todoSelector);
+
+	useEffect(() => {
+		store.dispatch(fetchTodos());
+	}, []);
+	console.log(todoSelector);
 
 	const result = useMemo(() => {
-		return todos.filter(todo => {
+		return todoSelector.filter(todo => {
 			return (
 				(filterStatus === "All"
 					? true
 					: String(todo.isDone) === filterStatus) &&
-				todo.todo.startsWith(filterString)
+				(todo.todo.startsWith(filterString) || todo.todo.includes(filterString))
 			);
 		});
-	}, [filterStatus, todos, filterString]);
-
-	console.log(result);
-	console.log(todos);
+	}, [filterStatus, todoSelector, filterString]);
 
 	return (
 		<div className="flex justify-center my-12">
