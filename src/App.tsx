@@ -1,13 +1,19 @@
 import { useSelector } from "react-redux";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import InputFeild from "./components/Input";
-import { RootState } from "./features/store";
+import store, { RootState } from "./features/store";
 import TodoList from "./components/TodoList";
+import { getAllTodoThunk } from "./features/todo/todoSlice";
 
 function App() {
-	const todos = useSelector((state: RootState) => state.todos);
+	const todos = useSelector((state: RootState) => state.todos.todos);
 	const [filterStatus, setStatus] = useState<string>("All");
 	const [filterString, setFilterString] = useState<string>("");
+
+	useEffect(() => {
+		store.dispatch(getAllTodoThunk());
+		// console.log(todos);
+	}, [todos.length]);
 
 	const result = useMemo(() => {
 		return todos.filter(todo => {
@@ -15,13 +21,12 @@ function App() {
 				(filterStatus === "All"
 					? true
 					: String(todo.isDone) === filterStatus) &&
-				todo.todo.startsWith(filterString)
+				(todo.todo.startsWith(filterString) || todo.todo.includes(filterString))
 			);
 		});
 	}, [filterStatus, todos, filterString]);
 
 	console.log(result);
-	console.log(todos);
 
 	return (
 		<div className="flex justify-center my-12">

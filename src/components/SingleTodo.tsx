@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Todo } from "../models/Todo";
-import { doneTodo, deleteTodo, editTodo } from "../features/todo/todoSlice";
+import {
+	deleteTodoThunk,
+	doneTodoThunk,
+	editTodoThunk,
+} from "../features/todo/todoSlice";
+import store from "../features/store";
 
 type Props = {
 	todo: Todo;
@@ -13,18 +17,20 @@ const SingleTodo = ({ todo }: Props) => {
 	const [todoEdit, setTodoEdit] = useState<string>(todo.todo);
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const dispatch = useDispatch();
 
 	const handleDone = (id: number) => {
-		dispatch(doneTodo(id));
+		// dispatch(doneTodo(id));
+		store.dispatch(doneTodoThunk(id));
 	};
 
 	const handleDelete = (id: number) => {
-		dispatch(deleteTodo(id));
+		// dispatch(deleteTodo(id));
+		store.dispatch(deleteTodoThunk(id));
 	};
 
-	const handleEdit = (id: number, todo: string) => {
-		dispatch(editTodo({ id, todo }));
+	const handleEdit = (id: number, newTodo: string) => {
+		store.dispatch(editTodoThunk({ id, newTodo }));
+		// dispatch(editTodo({ id, todo }));
 		setEdit(false);
 	};
 
