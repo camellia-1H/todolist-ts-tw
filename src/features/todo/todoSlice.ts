@@ -1,7 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import { Todo } from '../../models/Todo'
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db } from './firebase';
+import { db } from '../../firebase';
 
 // toolkit hỗ trợ viết type cho action : sẽ gồm name/tên action
 /// action : todos/addTodo
